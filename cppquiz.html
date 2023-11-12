@@ -1,0 +1,294 @@
+<!--If your seeing this you probably did something wrong, right click this file and click 'open with' and find your web browser. If you wanted to read the code ignore this.-->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>C++ Quiz</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+            :root {
+                --accent: #0044ff;
+                --accentA: #0044ff55;
+            }
+            html {
+                overflow: hidden;
+            }
+            body {
+                margin: 0px;
+                font-family: 'Montserrat', sans-serif;
+                height: 100vh;
+                overflow: hidden;
+            }
+            .startpage {
+                position: absolute;
+                display: flex;
+                text-align: center;
+                align-items: center;
+                align-content: center;
+                justify-content: center;
+                height: 100vh;
+                width: 100vw;
+                z-index: 100;
+                opacity: 1;
+                transition: all 0.5s;
+            }
+            button {
+                font-family: 'Montserrat', sans-serif;
+                border: none;
+                border-radius: 10px;
+                padding: 10px 20px;
+                background-color: var(--accent);
+                color: #ffffff;
+                cursor: pointer;
+                transition: ease-in-out 0.2s all;
+            }
+            button:hover {
+                transform: scale(.95);
+                box-shadow: var(--accentA) 0px 0px 0px 5px;
+                border-width: 5px;
+            }
+            .bg {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                filter: blur(0px);
+                transition: all 0.5s;
+                z-index: 0;
+            }
+            .startpageblur {
+                position: absolute;
+                height: 100vh;
+                width: 100vw;
+                background-image: radial-gradient(circle closest-side, #ffffff90 0%, transparent 50%);
+                z-index: 50;
+            }
+            .questionpage {
+                display: none;
+                opacity: 0;
+                transform: translate(-50%, calc(-10vh - 50%));
+                transition: transform ease-in-out 0.5s, opacity ease-in-out 0.5s;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                z-index: 1000;
+            }
+            .shown {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+            .done {
+                opacity: 0;
+                transform: translate(-50%, calc(10vh - 50%));
+            }
+            
+            .qQuestion {
+                margin: 0px;
+            }
+            .questions {
+                display: grid;
+                height: 230px;
+                transition: all 0.5s;
+            }
+            .questions > button {
+                margin: 10px;
+                opacity: 1;
+                transform: translate(0px, 0px);
+                transition: all ease-in-out 0.5s, box-shadow ease-in-out 0.2s;
+            }
+            .questions > button.h, div.questions.h {
+                opacity: 0;
+                transform: translate(0px, 50px);
+            }
+
+
+            .answer {
+                display: none;
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0);
+                transition: transform ease-in-out 0.5s, opacity ease-in-out 0.5s;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                z-index: 10000;
+                text-align: center;
+            }
+            .answer > div {
+                display: none;
+            }
+            .present {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            .answer > div > h4 {
+                font-size: 40px;
+                margin: 0px;
+            }
+            .answer > div > svg {
+                width: 100px;
+                height: 100px;
+            }
+            .answer > div > h5 {
+                font-size: 14px;
+                font-family: 'Montserrat', sans-serif;
+                border: none;
+                border-radius: 10px;
+                padding: 10px 20px;
+                background-color: var(--accent);
+                color: #ffffff;
+                cursor: pointer;
+                margin: 10px;
+                font-weight: normal;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="answer">
+            <div class="correct">
+                <h4>Correct!</h4>
+                <svg viewBox="0 0 512 512">
+                    <polygon xmlns="http://www.w3.org/2000/svg" points="440.469,73.413 218.357,295.525 71.531,148.709 0,220.229 146.826,367.055 218.357,438.587 289.878,367.055 512,144.945" fill="#00ff00"/>
+                </svg>
+            </div>
+            <div class="incorrect">
+                <h4>Incorrect!</h4>
+                <svg viewBox="0 0 24 24">
+                    <path xmlns="http://www.w3.org/2000/svg" d="M4.70718 2.58574C4.31666 2.19522 3.68349 2.19522 3.29297 2.58574L2.58586 3.29285C2.19534 3.68337 2.19534 4.31654 2.58586 4.70706L9.87877 12L2.5859 19.2928C2.19537 19.6834 2.19537 20.3165 2.5859 20.7071L3.293 21.4142C3.68353 21.8047 4.31669 21.8047 4.70722 21.4142L12.0001 14.1213L19.293 21.4142C19.6835 21.8047 20.3167 21.8047 20.7072 21.4142L21.4143 20.7071C21.8048 20.3165 21.8048 19.6834 21.4143 19.2928L14.1214 12L21.4143 4.70706C21.8048 4.31654 21.8048 3.68337 21.4143 3.29285L20.7072 2.58574C20.3167 2.19522 19.6835 2.19522 19.293 2.58574L12.0001 9.87865L4.70718 2.58574Z" fill="#aa0000"/>
+                </svg>
+                <h3>The correct answer was</h3>
+                <h5>Answer Goes Here!</h5>
+            </div>
+        </div>
+        <div class="questionpage" id="q2">
+            <div>
+                <label class="qLabel">Question #2 · Syntax</label>
+                <h2 class="qQuestion">Is C++ an alias of C#?</h2>
+            </div>
+            <div class="questions h" style="height: 0px;">
+                <button class="a0 h">Yes</button>
+                <button class="a1 h">No</button>
+            </div>
+        </div>
+        <div class="questionpage" id="q1">
+            <div>
+                <label class="qLabel">Question #1 · Syntax</label>
+                <h2 class="qQuestion">What is a correct syntax to output "Hello World"?</h2>
+            </div>
+            <div class="questions h" style="height: 0px;">
+                <button class="a0 h">cout &lt;&lt; "Hello World";</button>
+                <button class="a1 h">Console.WriteLine("Hello World");</button>
+                <button class="a2 h">print("Hello World");</button>
+                <button class="a3 h">System.out.println("Hello World");</button>
+            </div>
+        </div>
+        <div class="startpage">
+            <div>
+                <h1 class="cpptitle">C++ Quiz</h1>
+                <button id="startbutton">Start</button>
+            </div>
+        </div>
+        <div class="startpageblur"></div>
+        <img class="bg" src="./bg.png">
+    </body>
+
+    <script>
+        var startButton = document.querySelector("#startbutton");
+        var bg = document.querySelector(".bg");
+        var startpageblur = document.querySelector(".startpageblur");
+        var startpage = document.querySelector(".startpage");
+        var qNum = 0
+        var rotD = 0
+        var ans = [1,2,1,1,1,1,2,1,1,1,1,3,1,1,1,1,1,1,1,1,3,1,1,1,1] // Yes, although these are the answers DON'T use them as the whole point of this is to test you, not to show that you can cheat.
+        var btna1 = document.querySelectorAll(".a0")
+        var btna2 = document.querySelectorAll(".a1")
+        var btna3 = document.querySelectorAll(".a2")
+        var btna4 = document.querySelectorAll(".a3")
+        function showAnswer(correct) {
+            document.querySelector("#q"+qNum).classList.replace("shown", "done")
+            if (!correct) {
+                document.querySelector(".answer > .incorrect > h5").innerHTML = document.querySelector("#q"+qNum+" > .questions > .a"+(ans[qNum - 1] - 1)).innerHTML
+            }
+            Aft(500, () => {
+                document.querySelector("#q"+qNum).style = ""
+            })
+            Aft(950, () => {
+                document.querySelector(".answer").style.display = "block"
+                if (correct) {
+                    document.querySelector(".answer > .correct").style.display = "block"
+                } else {
+                    document.querySelector(".answer > .incorrect").style.display = "block"
+                }
+            })
+            Aft(1000, () => {
+                document.querySelector(".answer").classList.add("present")
+            })
+            Aft(1300, () => {
+                rot(correct ? 45 : -45)
+            })
+            Aft(correct ? 2000 : 6000, () => {
+                document.querySelector(".answer").classList.remove("present")
+            })
+            Aft(correct ? 2500 : 6500, () => {
+                if (correct) {
+                    document.querySelector(".answer > .correct").style = ""
+                } else {
+                    document.querySelector(".answer > .incorrect").style = ""
+                }
+                document.querySelector(".answer").style = ""
+                advanceQuestion()
+            })
+        }
+        function answer(num) {
+            showAnswer(num == ans[qNum - 1])
+        }
+        function rot(amount) {
+            rotD += amount;
+            bg.style.transform = "translate(-50%, -50%) rotate("+rotD+"deg)"
+        }
+        for (var i = 0; i < btna1.length; i++) {
+            btna1[i].addEventListener("click", () => {answer(1)})
+        }
+        for (var i = 0; i < btna2.length; i++) {
+            btna2[i].addEventListener("click", () => {answer(2)})
+        }
+        for (var i = 0; i < btna3.length; i++) {
+            btna3[i].addEventListener("click", () => {answer(3)})
+        }
+        for (var i = 0; i < btna4.length; i++) {
+            btna4[i].addEventListener("click", () => {answer(4)})
+        }
+        function advanceQuestion() {
+            qNum += 1;
+            Aft(450, () => {
+                document.querySelector("#q"+qNum).style.display = "block"
+            })
+            Aft(500, () => {
+                document.querySelector("#q"+qNum).classList.add("shown")
+            })
+            Aft(1500, () => {
+                document.querySelector("#q"+qNum+" > .questions").style = ""
+                document.querySelector("#q"+qNum+" > .questions").classList.remove("h")
+            })
+            for (let i = 0; i < document.querySelector("#q"+qNum+" > .questions").children.length; i++) {
+                Aft(1500+i*50, () => {
+                    document.querySelector("#q"+qNum+" > .questions > .a"+i).classList.remove("h")
+                })
+            }
+        }
+        function remAft(e,t) {
+            setTimeout(() => {e.remove()}, t)
+        }
+        function Aft(t,c) {
+            setTimeout(c,t)
+        }
+        startButton.addEventListener("click", () => {
+            startpageblur.remove()
+            rot(45)
+            bg.style.filter = "blur(10px)"
+            startpage.style.opacity = 0
+            remAft(startpage, 500)
+            advanceQuestion()
+        })
+    </script>
+</html>
