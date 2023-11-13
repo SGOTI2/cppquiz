@@ -61,7 +61,7 @@
                 position: absolute;
                 height: 100vh;
                 width: 100vw;
-                background-image: radial-gradient(circle closest-side, #ffffff90 0%, transparent 50%);
+                background-image: radial-gradient(circle closest-side, #ffffffa4 0%, transparent 75%);
                 z-index: 50;
             }
             .questionpage {
@@ -141,6 +141,81 @@
                 margin: 10px;
                 font-weight: normal;
             }
+            .info {
+                position: absolute;
+                top: 50px;
+                right: 50px;
+                transition: all 0.5s;
+                display: flex;
+                z-index: 100000;
+                justify-content: space-between;
+                width: 250px;
+            }
+            .info > div > div:nth-child(1) {
+                font-size: 12.5px;
+                color: #585858;
+            }
+            .ended, .extrainfo {
+                top: 25%;
+                right: 50%;
+                width: 500px;
+                transform: translate(50%, -50%);
+                font-size: 30px;
+                -webkit-backdrop-filter: blur(10px);
+                backdrop-filter: blur(5px);
+                background-color: rgba(255, 255, 255, 0.2);
+                padding: 20px;
+                border-radius: 20px;
+            }
+            .ended > div > div:nth-child(1) {
+                font-size: 20px;
+            }
+            .extrainfo {
+                position: absolute;
+                top: 50%;
+                z-index: 99999;
+                height: 25%;
+                display: none;
+                transition: all 0.5s;
+                width: 800px;
+                overflow: scroll;
+            }
+            .hi {
+                top: 100%;
+                opacity:0;
+            }
+            table {
+                font-size: 15px;
+                border-collapse: collapse;
+            }
+            th, td {
+                padding: 5px 10px;
+            }
+            td > svg {
+                height: 15px;
+                width: 15px;
+                margin-right: 10px;
+            }
+            @media only screen and (max-width: 875px) {
+                .extrainfo,.ended {
+                    width: calc(100% - 50px);
+                    font-size: 20px;
+                }
+                table {
+                    font-size: 10px;
+                }
+                .ended > div > div:nth-child(1) {
+                    font-size: 15px;
+                }
+                .extrainfo {
+                    height: 50%;
+                    top: calc(75% - 25px)
+                }
+                .info {
+                    right: 50%;
+                    transform: translate(50%, -50%);
+                }
+            }
         </style>
     </head>
     <body>
@@ -160,28 +235,6 @@
                 <h5>Answer Goes Here!</h5>
             </div>
         </div>
-        <div class="questionpage" id="q2">
-            <div>
-                <label class="qLabel">Question #2 · Syntax</label>
-                <h2 class="qQuestion">Is C++ an alias of C#?</h2>
-            </div>
-            <div class="questions h" style="height: 0px;">
-                <button class="a0 h">Yes</button>
-                <button class="a1 h">No</button>
-            </div>
-        </div>
-        <div class="questionpage" id="q1">
-            <div>
-                <label class="qLabel">Question #1 · Syntax</label>
-                <h2 class="qQuestion">What is a correct syntax to output "Hello World"?</h2>
-            </div>
-            <div class="questions h" style="height: 0px;">
-                <button class="a0 h">cout &lt;&lt; "Hello World";</button>
-                <button class="a1 h">Console.WriteLine("Hello World");</button>
-                <button class="a2 h">print("Hello World");</button>
-                <button class="a3 h">System.out.println("Hello World");</button>
-            </div>
-        </div>
         <div class="startpage">
             <div>
                 <h1 class="cpptitle">C++ Quiz</h1>
@@ -190,105 +243,287 @@
         </div>
         <div class="startpageblur"></div>
         <img class="bg" src="./bg.png">
+        <div class="info" style="top: 0px;right:0px;opacity:0;">
+            <div>
+                <div>Progress</div>
+                <div class="prog">0.00%</div>
+            </div>
+            <div>
+                <div>Accuracy</div>
+                <div class="accr">0.00%</div>
+            </div>
+            <div>
+                <div>Timer</div>
+                <div class="timer"></div>
+            </div>
+        </div>
+        <div class="extrainfo hi">
+            <table class="tableH">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Your Answer</th>
+                        <th>Answer</th>
+                    </tr>
+                </thead>
+                <tbody class="table">
+
+                </tbody>
+            </table>
+        </div>
     </body>
 
     <script>
-        var startButton = document.querySelector("#startbutton");
-        var bg = document.querySelector(".bg");
-        var startpageblur = document.querySelector(".startpageblur");
-        var startpage = document.querySelector(".startpage");
-        var qNum = 0
-        var rotD = 0
-        var ans = [1,2,1,1,1,1,2,1,1,1,1,3,1,1,1,1,1,1,1,1,3,1,1,1,1] // Yes, although these are the answers DON'T use them as the whole point of this is to test you, not to show that you can cheat.
-        var btna1 = document.querySelectorAll(".a0")
-        var btna2 = document.querySelectorAll(".a1")
-        var btna3 = document.querySelectorAll(".a2")
-        var btna4 = document.querySelectorAll(".a3")
-        function showAnswer(correct) {
-            document.querySelector("#q"+qNum).classList.replace("shown", "done")
-            if (!correct) {
-                document.querySelector(".answer > .incorrect > h5").innerHTML = document.querySelector("#q"+qNum+" > .questions > .a"+(ans[qNum - 1] - 1)).innerHTML
+        var data = [
+            {
+                'type': `Syntax`,
+                'question': `What is a correct syntax to output "Hello World"?`,
+                'answer': 1,
+                'answers': [
+                    `cout &lt;&lt; "Hello World";`,
+                    `Console.WriteLine("Hello World");`,
+                    `print("Hello World");`,
+                    `System.out.println("Hello World");`
+                ]
+            },
+            {
+                'type': `General`,
+                'question': `Is C++ an alias of C#?`,
+                'answer': 2,
+                'answers': [
+                    `Yes`,
+                    `No`
+                ]
+            },
+            {
+                'type': `General`,
+                'question': `C++ is a ______ language`,
+                'answer': 4,
+                'answers': [
+                    `general-purpose`,
+                    `procedural and functional`,
+                    `object-oriented, generic, and modular`,
+                    `All of the above`
+                ]
+            },
+            {
+                'type': `Trivia`,
+                'question': `C++ was designed by`,
+                'answer': 1,
+                'answers': [
+                    `Bjarne Stroustrup`,
+                    `Dennis Ritchie`,
+                    `James Gosling`,
+                    `Albert Einstein`
+                ]
+            },
+            {
+                'type': `Trivia`,
+                'question': `C++ first appeared in`,
+                'answer': 3,
+                'answers': [
+                    `1995`,
+                    `1984`,
+                    `1985`,
+                    `1994`
+                ]
+            },
+            {
+                'type': `Trivia`,
+                'question': `C++ is an extension of C with a major addition of the class construct feature of`,
+                'answer': 2,
+                'answers': [
+                    `Simula57`,
+                    `Simula67`,
+                    `Simula47`,
+                    `Simula87`
+                ]
+            },
+            {
+                'type': `Program`,
+                'question': `C++ is an extension of C with a major addition of the class construct feature of`,
+                'answer': 3,
+                'answers': [
+                    `1`,
+                    `-1`,
+                    `0`,
+                    `None of the Above`
+                ]
+            },
+            {
+                'type': `Syntax`,
+                'question': `Which of the following is a correct comment`,
+                'answer': 4,
+                'answers': [
+                    `*/ Comment-text */`,
+                    `{ Comment-text }`,
+                    `** Comment-text **`,
+                    `/* Comment-text */`
+                ]
             }
-            Aft(500, () => {
-                document.querySelector("#q"+qNum).style = ""
-            })
-            Aft(950, () => {
-                document.querySelector(".answer").style.display = "block"
-                if (correct) {
-                    document.querySelector(".answer > .correct").style.display = "block"
-                } else {
-                    document.querySelector(".answer > .incorrect").style.display = "block"
+        ]
+        var ans = []
+        for (let i = 0; i < data.length; i++) {
+            let secDat = data[i]
+            var qTxt = ``
+            for (var ai = 0; ai < secDat.answers.length; ai++) {
+                qTxt += `<button class="a${ai} h">${secDat.answers[ai]}</button>`
+            }
+            ans.push(secDat.answer)
+            document.querySelector(".answer").insertAdjacentHTML("afterend", `<div class="questionpage" id="q${i+1}">
+    <div>
+        <label class="qLabel">Question #${i+1} · ${secDat.type}</label>
+        <h2 class="qQuestion">${secDat.question}</h2>
+    </div>
+    <div class="questions h" style="height: 0px;">
+        ${qTxt}
+    </div>
+</div>`)
+        }
+        document.querySelector(".answer").after()
+        setTimeout(() => {
+            var timer = document.querySelector(".timer")
+            var startTime;
+            var startButton = document.querySelector("#startbutton");
+            var bg = document.querySelector(".bg");
+            var startpageblur = document.querySelector(".startpageblur");
+            var startpage = document.querySelector(".startpage");
+            var table = document.querySelector(".table");
+            var qNum = 0
+            var rotD = 0
+            var record = []
+            var accuracy = 0
+            var total = document.querySelectorAll(".questionpage").length
+            var info = document.querySelector(".info")
+            var btna1 = document.querySelectorAll(".a0")
+            var btna2 = document.querySelectorAll(".a1")
+            var btna3 = document.querySelectorAll(".a2")
+            var btna4 = document.querySelectorAll(".a3")
+            function showAnswer(correct) {
+                document.querySelector("#q"+qNum).classList.replace("shown", "done")
+                if (!correct) {
+                    document.querySelector(".answer > .incorrect > h5").innerHTML = document.querySelector("#q"+qNum+" > .questions > .a"+(ans[qNum - 1] - 1)).innerHTML
                 }
-            })
-            Aft(1000, () => {
-                document.querySelector(".answer").classList.add("present")
-            })
-            Aft(1300, () => {
-                rot(correct ? 45 : -45)
-            })
-            Aft(correct ? 2000 : 6000, () => {
-                document.querySelector(".answer").classList.remove("present")
-            })
-            Aft(correct ? 2500 : 6500, () => {
-                if (correct) {
-                    document.querySelector(".answer > .correct").style = ""
-                } else {
-                    document.querySelector(".answer > .incorrect").style = ""
-                }
-                document.querySelector(".answer").style = ""
-                advanceQuestion()
-            })
-        }
-        function answer(num) {
-            showAnswer(num == ans[qNum - 1])
-        }
-        function rot(amount) {
-            rotD += amount;
-            bg.style.transform = "translate(-50%, -50%) rotate("+rotD+"deg)"
-        }
-        for (var i = 0; i < btna1.length; i++) {
-            btna1[i].addEventListener("click", () => {answer(1)})
-        }
-        for (var i = 0; i < btna2.length; i++) {
-            btna2[i].addEventListener("click", () => {answer(2)})
-        }
-        for (var i = 0; i < btna3.length; i++) {
-            btna3[i].addEventListener("click", () => {answer(3)})
-        }
-        for (var i = 0; i < btna4.length; i++) {
-            btna4[i].addEventListener("click", () => {answer(4)})
-        }
-        function advanceQuestion() {
-            qNum += 1;
-            Aft(450, () => {
-                document.querySelector("#q"+qNum).style.display = "block"
-            })
-            Aft(500, () => {
-                document.querySelector("#q"+qNum).classList.add("shown")
-            })
-            Aft(1500, () => {
-                document.querySelector("#q"+qNum+" > .questions").style = ""
-                document.querySelector("#q"+qNum+" > .questions").classList.remove("h")
-            })
-            for (let i = 0; i < document.querySelector("#q"+qNum+" > .questions").children.length; i++) {
-                Aft(1500+i*50, () => {
-                    document.querySelector("#q"+qNum+" > .questions > .a"+i).classList.remove("h")
+                Aft(500, () => {
+                    document.querySelector("#q"+qNum).style = ""
+                })
+                Aft(950, () => {
+                    document.querySelector(".answer").style.display = "block"
+                    if (correct) {
+                        document.querySelector(".answer > .correct").style.display = "block"
+                    } else {
+                        document.querySelector(".answer > .incorrect").style.display = "block"
+                    }
+                })
+                Aft(1000, () => {
+                    document.querySelector(".answer").classList.add("present")
+                })
+                Aft(1300, () => {
+                    accuracy += correct ? 1 : 0
+                    document.querySelector(".accr").innerHTML = (accuracy/record.length*100).toFixed(1)+"%"
+                    document.querySelector(".prog").innerHTML = (record.length/total*100).toFixed(1)+"%"
+                    rot(correct ? 45 : -45)
+                })
+                Aft(correct ? 2000 : 6000, () => {
+                    document.querySelector(".answer").classList.remove("present")
+                })
+                Aft(correct ? 2500 : 6500, () => {
+                    if (correct) {
+                        document.querySelector(".answer > .correct").style = ""
+                    } else {
+                        document.querySelector(".answer > .incorrect").style = ""
+                    }
+                    document.querySelector(".answer").style = ""
+                    advanceQuestion()
                 })
             }
-        }
-        function remAft(e,t) {
-            setTimeout(() => {e.remove()}, t)
-        }
-        function Aft(t,c) {
-            setTimeout(c,t)
-        }
-        startButton.addEventListener("click", () => {
-            startpageblur.remove()
-            rot(45)
-            bg.style.filter = "blur(10px)"
-            startpage.style.opacity = 0
-            remAft(startpage, 500)
-            advanceQuestion()
-        })
+            function answer(num) {
+                record.push(num)
+                showAnswer(num == ans[qNum - 1])
+            }
+            function rot(amount) {
+                rotD += amount;
+                bg.style.transform = "translate(-50%, -50%) rotate("+rotD+"deg) scale("+(0.75+record.length/total)+")"
+            }
+            for (var i = 0; i < btna1.length; i++) {
+                btna1[i].addEventListener("click", () => {answer(1)})
+            }
+            for (var i = 0; i < btna2.length; i++) {
+                btna2[i].addEventListener("click", () => {answer(2)})
+            }
+            for (var i = 0; i < btna3.length; i++) {
+                btna3[i].addEventListener("click", () => {answer(3)})
+            }
+            for (var i = 0; i < btna4.length; i++) {
+                btna4[i].addEventListener("click", () => {answer(4)})
+            }
+            function endCase() {
+                clearInterval(intveral);
+                info.classList.add("ended")
+                bg.style.filter = "blur(0px)"
+                rotD += 45;
+                bg.style.transform = "translate(-50%, -50%) rotate("+rotD+"deg) scale(2)"
+                tA = 0
+                for (var i = 0; i < record.length; i++) {
+                    tA += record[i] == ans[i] ? 1 : 0
+                    answ = document.querySelector("#q"+(i+1)+" > .questions > .a"+(record[i] - 1)).innerHTML
+                    cansw = document.querySelector("#q"+(i+1)+" > .questions > .a"+(ans[i] - 1)).innerHTML
+                    que = answ == cansw ? `<svg viewBox="0 0 512 512"><polygon xmlns="http://www.w3.org/2000/svg" points="440.469,73.413 218.357,295.525 71.531,148.709 0,220.229 146.826,367.055 218.357,438.587 289.878,367.055 512,144.945" fill="#00ff00"/></svg>` : `<svg viewBox="0 0 24 24"><path xmlns="http://www.w3.org/2000/svg" d="M4.70718 2.58574C4.31666 2.19522 3.68349 2.19522 3.29297 2.58574L2.58586 3.29285C2.19534 3.68337 2.19534 4.31654 2.58586 4.70706L9.87877 12L2.5859 19.2928C2.19537 19.6834 2.19537 20.3165 2.5859 20.7071L3.293 21.4142C3.68353 21.8047 4.31669 21.8047 4.70722 21.4142L12.0001 14.1213L19.293 21.4142C19.6835 21.8047 20.3167 21.8047 20.7072 21.4142L21.4143 20.7071C21.8048 20.3165 21.8048 19.6834 21.4143 19.2928L14.1214 12L21.4143 4.70706C21.8048 4.31654 21.8048 3.68337 21.4143 3.29285L20.7072 2.58574C20.3167 2.19522 19.6835 2.19522 19.293 2.58574L12.0001 9.87865L4.70718 2.58574Z" fill="#ff0000"/></svg>`
+                    que += document.querySelector("#q"+(i+1)+" > div > h2.qQuestion").innerHTML
+                    table.innerHTML += `<tr><td>${que}</td><td>${answ}</td><td>${cansw}</td></tr>`
+                }
+                document.querySelector(".accr").innerHTML = (tA/record.length*100).toFixed(1)+"%"
+                document.querySelector(".extrainfo").style.display = "block"
+                Aft(50,() => {
+                    document.querySelector(".extrainfo").classList.remove("hi")
+                })
+            }
+            function advanceQuestion() {
+                qNum += 1;
+                if (qNum > total) {
+                    endCase()
+                    return
+                }
+                Aft(450, () => {
+                    document.querySelector("#q"+qNum).style.display = "block"
+                })
+                Aft(500, () => {
+                    document.querySelector("#q"+qNum).classList.add("shown")
+                })
+                Aft(1500, () => {
+                    document.querySelector("#q"+qNum+" > .questions").style = ""
+                    document.querySelector("#q"+qNum+" > .questions").classList.remove("h")
+                })
+                for (let i = 0; i < document.querySelector("#q"+qNum+" > .questions").children.length; i++) {
+                    Aft(1500+i*50, () => {
+                        document.querySelector("#q"+qNum+" > .questions > .a"+i).classList.remove("h")
+                    })
+                }
+            }
+            function remAft(e,t) {
+                setTimeout(() => {e.remove()}, t)
+            }
+            function Aft(t,c) {
+                setTimeout(c,t)
+            }
+            var intveral;
+            startButton.addEventListener("click", () => {
+                startpageblur.remove()
+                rot(45)
+                bg.style.filter = "blur(10px)"
+                startpage.style.opacity = 0
+                remAft(startpage, 500)
+                startTime = new Date()
+                info.style = ""
+                timer.innerHTML = "00:00"
+                intveral = setInterval(() => {
+                    var diff = (()=>{return new Date()})() - startTime
+                    var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    var seconds = Math.floor((diff % (1000 * 60)) / 1000)
+                    timer.innerHTML = (minutes > 9 ? "" : "0")+minutes + ":"+(seconds > 9 ? "" : "0")+seconds;
+                },1000)
+                advanceQuestion()
+            })
+        },1000);
     </script>
 </html>
