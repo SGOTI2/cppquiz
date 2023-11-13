@@ -464,6 +464,81 @@
 				},
 				{ type: `Definition`, question: "How to define a destructor?", answers: ["X() &tilde;{}", "X&tilde;() {}", "&tilde;X() {}", "X() {}&tilde;"], answer: 3 },
 				{ type: `Definition`, question: "The constants are also called as", answers: ["literals", "const", "preprocessor", "None of the Above"], answer: 1 },
+				{ type: `Syntax`, question: "What are the parts of the literal constants?", answers: ["strings and boolean values", "integer numerals", "floating-point numerals", "All of the above"], answer: 4 },
+				{ type: `Syntax`, question: "How the constants are declared?", answers: ["#define preprocessor", "const keyword", "All of the above", "None of the Above"], answer: 3 },
+				{ type: `Program`, question: "Declaring pointer more than one can cause", answers: ["abort a program", "error", "Trap", "None of the Above"], answer: 3 },
+				{
+					type: `Definition`,
+					question: "Meaning of deed copy is a",
+					answers: [
+						"deep copy just copies the values of the data as they are",
+						"deep copy creates a copy of the dynamically allocated objects too",
+						"deep copy creates a copy of the statically allocated objects too",
+						"None of the Above",
+					],
+					answer: 2,
+				},
+				{ type: `Syntax`, question: "Which is not a correct variable type in C++?", answers: ["float", "int", "real", "double"], answer: 3 },
+				{ type: `Program`, question: "Which is boolean operator for logical and?", answers: ["||", "&amp;", "&amp;&amp;", "&amp;|"], answer: 3 },
+				{
+					type: `Definition`,
+					question: "Difference between static and dynamic memory allocation is",
+					answers: ["In dynamic memory allocation memory to be allocated in preknown", "In static memory allocation memory to be allocated in preknown", "There is no differnece", "None of the Above"],
+					answer: 2,
+				},
+				{ type: `Syntax`, question: "In C++, the expression x.y represents as", answers: ["member y of object x", "member x of object y", "member y of object pointed by x", "All the above"], answer: 1 },
+				{
+					type: `Program`,
+					question: "Which of the following cannot be inherited from the base class?",
+					answers: ["Friend", "Constructor", "Both A and B can be inherited", "Both A and B cannot be inherited"],
+					answer: 4,
+				},
+				{ type: `Syntax`, question: "How we mark the end of C++ statement?", answers: [":", ".", ";", "None of the Above"], answer: 3 },
+				{
+					type: `General`,
+					question: "Is the size of character literals different in C and C++?",
+					answers: ["Implementation defined", "Can not say", "Yes, they are different", "No, they are not different"],
+					answer: 3,
+				},
+				{
+					type: `Program`,
+					question: "Which of the following statement is not true about preprocessor directives?",
+					answers: ["These must be written on their own line", "These are lines read and processed by the preprocessor", "They do not produce any code by themselves", "They end with a semicolon"],
+					answer: 4,
+				},
+				{
+					type: `Analysis`,
+					question: "Which of the following statement is true on &quot;const int a = 100;&quot;?",
+					answers: [
+						"Constructs an integer type variable with a as identifier and 100 as value",
+						"Declares a variable a with 100 as its initial value",
+						"Declares a construction a with 100 as its initial value",
+						"Declares a constant a whose value will be 100",
+					],
+					answer: 4,
+				},
+				{ type: `Definition`, question: "Dereference operator is also called as", answers: ["reference operator", "pointer", "deoffset operator", "offset operator"], answer: 4 },
+				{
+					type: `Program`,
+					question: "In C++, ios::ate is used to set the",
+					answers: [
+						"last position at the end of the file",
+						"the initial position at the start of the file",
+						"the last position at the start of the file",
+						"the initial position at the end of the file",
+					],
+					answer: 4,
+				},
+				{ type: `Definition`, question: "Which class has only one unique value for all the objects of class?", answers: ["static", "this", "friend", "None of the Above"], answer: 1 },
+				{
+					type: `Definition`,
+					question: "Which type of variables can be referred from anywhere in the C++ code?",
+					answers: ["Global variables", "Universal variables", "Local variables", "All variables"],
+					answer: 1,
+				},
+				{ type: `General`, question: "What is the size of int datatype for 32-bit system?", answers: ["8 byte", "4 byte", "2 byte", "1 byte"], answer: 2 },
+				{ type: `Syntax`, question: "How we define our name for constants in C++?", answers: ["#define_constant", "#constant_define", "#constant", "#define"], answer: 4 },
+				{ type: `Program`, question: "Every C++ programs must contain", answers: ["start()", "main()", "system()", "program()"], answer: 2 },
 			];
 			var ans = [];
 			for (let i = 0; i < data.length; i++) {
@@ -525,15 +600,15 @@
 						document.querySelector(".answer").classList.add("present");
 					});
 					Aft(1000, () => {
-						accuracy += correct? 1 : 0;
+						accuracy += correct ? 1 : 0;
 						document.querySelector(".accr").innerHTML = ((accuracy / record.length) * 100).toFixed(1) + "%";
 						document.querySelector(".prog").innerHTML = ((record.length / total) * 100).toFixed(1) + "%";
-						rot(correct? 25 : -45);
+						rot(correct ? 25 : -45);
 					});
-					Aft(correct? 1700 : 5700, () => {
+					Aft(correct ? 1700 : 5700, () => {
 						document.querySelector(".answer").classList.remove("present");
 					});
-					Aft(correct? 2200 : 6200, () => {
+					Aft(correct ? 2200 : 6200, () => {
 						if (correct) {
 							document.querySelector(".answer > .correct").style = "";
 						} else {
@@ -579,7 +654,7 @@
 					bg.style.transform = "translate(-50%, -50%) rotate(" + rotD + "deg) scale(2)";
 					tA = 0;
 					for (var i = 0; i < record.length; i++) {
-						tA += record[i] == ans[i]? 1 : 0;
+						tA += record[i] == ans[i] ? 1 : 0;
 						answ = document.querySelector("#q" + (i + 1) + " > .questions > .a" + (record[i] - 1)).innerHTML;
 						cansw = document.querySelector("#q" + (i + 1) + " > .questions > .a" + (ans[i] - 1)).innerHTML;
 						que =
@@ -642,7 +717,7 @@
 							})() - startTime;
 						var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
 						var seconds = Math.floor((diff % (1000 * 60)) / 1000);
-						timer.innerHTML = (minutes > 9? "" : "0") + minutes + ":" + (seconds > 9? "" : "0") + seconds;
+						timer.innerHTML = (minutes > 9 ? "" : "0") + minutes + ":" + (seconds > 9 ? "" : "0") + seconds;
 					}, 1000);
 					advanceQuestion();
 				});
